@@ -4,33 +4,60 @@ body {
   color: #333;
   font-size: 16px;
 }
-body .cards {
-  overflow-y: auto;
-}
-body .cards::-webkit-scrollbar {
-  display: none;
-}
 body .cards.top {
   margin-top: 10px;
   border-radius: 3px;
+  position: relative;
+}
+body .cards.top .contents {
+  height: 100%;
 }
 body .cards.top .card .inner {
   margin-bottom: 10px;
+}
+body .cards.top .card:last-child .inner {
+  margin-bottom: 0;
 }
 body .cards.bottom {
   position: absolute;
   width: 100%;
   bottom: 10px;
-  max-height: 50%;
 }
 body .cards.bottom .card .inner {
   margin-top: 10px;
 }
-body .cards .card {
+body .cards.bottom .card:first-child .inner {
+  margin-top: 0;
+}
+body .cards .overflow-indicator {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  height: 20px;
+  background-color: #d25252;
+  z-index: 100;
+}
+body .cards .overflow-indicator.top {
+  top: -3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+body .cards .overflow-indicator.bottom {
+  bottom: -3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+body .cards .contents {
+  overflow-y: auto;
+}
+body .cards .contents::-webkit-scrollbar {
+  display: none;
+}
+body .cards .contents .card {
   overflow: hidden;
   margin: 0 10px;
 }
-body .cards .card .inner {
+body .cards .contents .card .inner {
   min-height: 60px;
   background-color: #eee;
   border-radius: 3px;

@@ -7,18 +7,21 @@ body {
     font-size: 16px;
 
     .cards {
-        overflow-y: auto;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
 
         &.top {
             margin-top: 10px;
             border-radius: 3px;
+            position: relative;
+
+            .contents {
+                height: 100%;
+            }
 
             .card .inner {
                 margin-bottom: 10px;
+            }
+            .card:last-child .inner {
+                margin-bottom: 0;
             }
         }
 
@@ -26,28 +29,59 @@ body {
             position: absolute;
             width: 100%;
             bottom: 10px;
-            max-height: 50%;
 
             .card .inner {
                 margin-top: 10px;
             }
+            .card:first-child .inner {
+                margin-top: 0;
+            }
         }
 
-        .card {
-            overflow: hidden;
-            margin: 0 10px;
+        .overflow-indicator {
+            position: absolute;
+            left: 10px;
+            right: 10px;
+            height: 20px;
+            background-color: #d25252;
+            z-index: 100;
 
-            .inner {
-                min-height: 60px;
-                background-color: #eee;
-                border-radius: 3px;
+            &.top {
+                top: -3px;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
             }
 
-            // Media Cards
-            &.media {
-                
+            &.bottom {
+                bottom: -3px;
+                border-bottom-left-radius: 3px;
+                border-bottom-right-radius: 3px;
+            }
+        }
+
+        .contents {
+            overflow-y: auto;
+
+            &::-webkit-scrollbar {
+                display: none;
             }
 
+            .card {
+                overflow: hidden;
+                margin: 0 10px;
+
+                .inner {
+                    min-height: 60px;
+                    background-color: #eee;
+                    border-radius: 3px;
+                }
+
+                // Media Cards
+                &.media {
+                    
+                }
+
+            }
         }
     }
 

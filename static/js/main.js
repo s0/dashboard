@@ -5,27 +5,53 @@
         var msg_id = 0,
             $window = $(window),
             $cards_top = $('.cards.top:first'),
-            $cards_bottom = $('.cards.bottom:first');
+            $cards_top_contents = $cards_top.children('.contents:first'),
+            $cards_bottom = $('.cards.bottom:first'),
+            $cards_bottom_contents = $cards_bottom.children('.contents:first')
 
         // Cards Overflow / Scroll
 
-        function update_top_cards_scroll_indicators($cards){
-            console.log(msg_id++)
+        function update_top_cards_scroll_indicators(){
+            var $contents         = $(this),
+                height            = $contents.height(),
+                scrollHeight      = $contents.get(0).scrollHeight,
+                scrollTop         = $contents.scrollTop(),
+                $top_indicator    = $contents.parent()
+                                    .children('.overflow-indicator.top')
+                                    .first(),
+                $bottom_indicator = $contents.parent()
+                                    .children('.overflow-indicator.bottom')
+                                    .first();
+
+            if(scrollTop == 0){
+                $top_indicator.hide();
+            } else {
+                $top_indicator.show();
+            }
+
+            if(height >= scrollHeight - scrollTop){
+                $bottom_indicator.hide();
+            } else {
+                $bottom_indicator.show();
+            }
+
         }
 
-        $('.cards').scroll(function(){
-            update_top_cards_scroll_indicators($(this))
-        })
-
+        $('.cards .contents').scroll(update_top_cards_scroll_indicators)
 
         function resize_top_cards() {
-            var new_h = $window.height() - $cards_bottom.height() - 20;
+            var new_h = $window.height() - $cards_bottom.height() - 30;
             $cards_top.height(new_h);
-            update_top_cards_scroll_indicators($cards_top)
+
+            $('.cards .contents').each(update_top_cards_scroll_indicators)
         }
 
-        $(window).resize(resize_top_cards)
+        $window.resize(function(){
+            $cards_bottom_contents.css('max-height', $window.height() / 2)
+            resize_top_cards()
+        })
 
+         $window.trigger('resize')
 
 
         // Card Manipulation
