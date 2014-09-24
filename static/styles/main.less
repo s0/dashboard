@@ -1,15 +1,39 @@
 body {
-    color: #f00;
+    margin: 0;
+    padding: 0;
+
+    // Font
+    color: #333;
+    font-size: 16px;
 
     .cards {
+        margin: 0 10px;
+
+        &.top {
+            margin-top: 10px;
+
+            .card .inner {
+                margin-bottom: 10px;
+            }
+        }
+
+        &.bottom {
+            margin-bottom: 10px;
+
+            .card .inner {
+                margin-top: 10px;
+            }
+        }
 
         .card {
+            overflow: hidden;
 
             .inner {
                 min-height: 60px;
                 background-color: #eee;
                 border-radius: 3px;
             }
+
         }
     }
 

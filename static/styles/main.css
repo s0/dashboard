@@ -1,5 +1,26 @@
 body {
-  color: #f00;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  font-size: 16px;
+}
+body .cards {
+  margin: 0 10px;
+}
+body .cards.top {
+  margin-top: 10px;
+}
+body .cards.top .card .inner {
+  margin-bottom: 10px;
+}
+body .cards.bottom {
+  margin-bottom: 10px;
+}
+body .cards.bottom .card .inner {
+  margin-top: 10px;
+}
+body .cards .card {
+  overflow: hidden;
 }
 body .cards .card .inner {
   min-height: 60px;
