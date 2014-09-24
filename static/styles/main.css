@@ -5,22 +5,30 @@ body {
   font-size: 16px;
 }
 body .cards {
-  margin: 0 10px;
+  overflow-y: auto;
+}
+body .cards::-webkit-scrollbar {
+  display: none;
 }
 body .cards.top {
   margin-top: 10px;
+  border-radius: 3px;
 }
 body .cards.top .card .inner {
   margin-bottom: 10px;
 }
 body .cards.bottom {
-  margin-bottom: 10px;
+  position: absolute;
+  width: 100%;
+  bottom: 10px;
+  max-height: 50%;
 }
 body .cards.bottom .card .inner {
   margin-top: 10px;
 }
 body .cards .card {
   overflow: hidden;
+  margin: 0 10px;
 }
 body .cards .card .inner {
   min-height: 60px;

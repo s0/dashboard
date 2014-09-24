@@ -7,10 +7,15 @@ body {
     font-size: 16px;
 
     .cards {
-        margin: 0 10px;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         &.top {
             margin-top: 10px;
+            border-radius: 3px;
 
             .card .inner {
                 margin-bottom: 10px;
@@ -18,7 +23,10 @@ body {
         }
 
         &.bottom {
-            margin-bottom: 10px;
+            position: absolute;
+            width: 100%;
+            bottom: 10px;
+            max-height: 50%;
 
             .card .inner {
                 margin-top: 10px;
@@ -27,11 +35,17 @@ body {
 
         .card {
             overflow: hidden;
+            margin: 0 10px;
 
             .inner {
                 min-height: 60px;
                 background-color: #eee;
                 border-radius: 3px;
+            }
+
+            // Media Cards
+            &.media {
+                
             }
 
         }
