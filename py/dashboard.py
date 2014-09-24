@@ -3,7 +3,8 @@
 #!/usr/bin/env python
 
 import cairo
-from gi.repository import Gtk, Gdk
+import os
+from gi.repository import Gtk, Gdk, WebKit
 
 class SidebarWindow (Gtk.Window):
     def __init__(self):
@@ -20,6 +21,9 @@ class SidebarWindow (Gtk.Window):
         box = Gtk.Box()
         self.add(box)
 
+        webview = SidebarWebView()
+        box.add(webview)
+
         self.set_app_paintable(True)
         self.connect("draw", self.area_draw)
 
@@ -35,6 +39,19 @@ class SidebarWindow (Gtk.Window):
         cr.paint()
         cr.set_operator(cairo.OPERATOR_OVER)
 
+class SidebarWebView (WebKit.WebView):
+
+    def __init__(self):
+        super(SidebarWebView, self).__init__()
+
+        # Enable Transparency
+        self.set_transparent(True)
+
+        # Load HTML
+        project = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        html = os.path.join(project, "static/dashboard.html")
+
+        self.load_string(file(html).read(), 'text/html', 'UTF-8', "file://" + html)
 
 if __name__ == "__main__":
     SidebarWindow()

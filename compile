@@ -1,1 +1,3 @@
 #! /bin/bash
+
+lessc static/styles/main.less > static/styles/main.css
