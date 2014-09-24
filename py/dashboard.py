@@ -4,6 +4,8 @@
 
 import cairo
 import os
+import signal
+
 from gi.repository import Gtk, Gdk, WebKit
 
 class SidebarWindow (Gtk.Window):
@@ -16,27 +18,19 @@ class SidebarWindow (Gtk.Window):
         if rgba_visual != None and screen.is_composited():
             print "compositing supported"
             self.set_visual(rgba_visual)
-        self.set_app_paintable(True)
+
+        # Set Background Color
+        self.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(0, 0, 0, 0))
 
         # Setup Webview
         webview = SidebarWebView()
         self.add(webview)
 
         # Window Listeners
-        self.connect("draw", self.draw_bg)
         self.connect("destroy", lambda g: Gtk.main_quit())
 
         # Show
         self.show_all()
-
-    def draw_bg(self, widget, cr):
-        """
-        Draw the transparent backround
-        """
-        cr.set_source_rgba(.0, .0, .0, 0.0)
-        cr.set_operator(cairo.OPERATOR_SOURCE)
-        cr.paint()
-        cr.set_operator(cairo.OPERATOR_OVER)
 
 class SidebarWebView (WebKit.WebView):
 
@@ -54,4 +48,6 @@ class SidebarWebView (WebKit.WebView):
 
 if __name__ == "__main__":
     SidebarWindow()
+    # Make close on Ctrl + C
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     Gtk.main()
