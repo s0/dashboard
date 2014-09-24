@@ -21,6 +21,21 @@ body {
     color: #333;
     font-size: 16px;
 
+    // Global Styles
+    .btn {
+        cursor: pointer;
+
+        &:hover {
+            color: #666;
+        }
+
+        &.disabled, &.disabled:hover {
+            color: #888;
+            cursor: default;
+        }
+    }
+
+    // Localised Styles
     .cards {
 
         &.top {
@@ -117,6 +132,7 @@ body {
                     .top {
                         padding: 5px 5px 0;
                         overflow: auto;
+                        position: relative;
 
                         .art {
                             float: left;
@@ -125,8 +141,39 @@ body {
                             background-color: #333;
                         }
 
+                        .btn {
+                            position: absolute;
+                            width: 40px;
+                            right: 5px;
+                            top: 0;
+                            height: 100%;
+
+                            .control {
+                                position: absolute;
+                                width: 100%;
+                                top: 50%;
+                                height: 0;
+
+                                div {
+                                    .glyphicon;
+                                    position: absolute;
+                                    top: -15px;
+                                    font-size: 30px;
+                                    text-align: center;
+
+                                    &.play:before {
+                                        content: "\e072";
+                                    }
+
+                                    &.pause:before {
+                                        content: "\e073";
+                                    }
+                                }
+                            }
+                        }
+
                         .info {
-                            margin-left: 55px;
+                            margin: 0 55px;
 
                             .title {
                                 font-weight: 700;
@@ -147,12 +194,33 @@ body {
 
                     .bottom {
                         margin: 5px;
+                        height: 24px;
                         border-top: 1px solid #ccc;
 
                         .device {
+                            float: left;
                             font-size: 10px;
                             color: #666;
-                            line-height: 20px;
+                            line-height: 24px;
+                        }
+
+                        .btn {
+                            .glyphicon;
+                            float: right;
+                            margin: 5px 8px 0 3px;
+                            font-size: 12px;
+                        }
+
+                        .next:before {
+                            content: "\e076";
+                        }
+
+                        .prev:before {
+                            content: "\e070";
+                        }
+
+                        .stop:before {
+                            content: "\e074";
                         }
                     }
                 }

@@ -9,6 +9,17 @@ body {
   color: #333;
   font-size: 16px;
 }
+body .btn {
+  cursor: pointer;
+}
+body .btn:hover {
+  color: #666;
+}
+body .btn.disabled,
+body .btn.disabled:hover {
+  color: #888;
+  cursor: default;
+}
 body .cards.top {
   margin-top: 10px;
   border-radius: 3px;
@@ -90,6 +101,7 @@ body .cards .contents .card .inner {
 body .cards .contents .card.media .top {
   padding: 5px 5px 0;
   overflow: auto;
+  position: relative;
 }
 body .cards .contents .card.media .top .art {
   float: left;
@@ -97,8 +109,38 @@ body .cards .contents .card.media .top .art {
   height: 50px;
   background-color: #333;
 }
+body .cards .contents .card.media .top .btn {
+  position: absolute;
+  width: 40px;
+  right: 5px;
+  top: 0;
+  height: 100%;
+}
+body .cards .contents .card.media .top .btn .control {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  height: 0;
+}
+body .cards .contents .card.media .top .btn .control div {
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  top: -15px;
+  font-size: 30px;
+  text-align: center;
+}
+body .cards .contents .card.media .top .btn .control div.play:before {
+  content: "\e072";
+}
+body .cards .contents .card.media .top .btn .control div.pause:before {
+  content: "\e073";
+}
 body .cards .contents .card.media .top .info {
-  margin-left: 55px;
+  margin: 0 55px;
 }
 body .cards .contents .card.media .top .info .title {
   font-weight: 700;
@@ -113,10 +155,31 @@ body .cards .contents .card.media .top .info .album {
 }
 body .cards .contents .card.media .bottom {
   margin: 5px;
+  height: 24px;
   border-top: 1px solid #ccc;
 }
 body .cards .contents .card.media .bottom .device {
+  float: left;
   font-size: 10px;
   color: #666;
-  line-height: 20px;
+  line-height: 24px;
+}
+body .cards .contents .card.media .bottom .btn {
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  float: right;
+  margin: 5px 8px 0 3px;
+  font-size: 12px;
+}
+body .cards .contents .card.media .bottom .next:before {
+  content: "\e076";
+}
+body .cards .contents .card.media .bottom .prev:before {
+  content: "\e070";
+}
+body .cards .contents .card.media .bottom .stop:before {
+  content: "\e074";
 }
