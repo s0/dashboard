@@ -16,25 +16,24 @@ class SidebarWindow (Gtk.Window):
         if rgba_visual != None and screen.is_composited():
             print "compositing supported"
             self.set_visual(rgba_visual)
-
-        # Setup Components
-        box = Gtk.Box()
-        self.add(box)
-
-        webview = SidebarWebView()
-        box.add(webview)
-
         self.set_app_paintable(True)
-        self.connect("draw", self.area_draw)
 
+        # Setup Webview
+        webview = SidebarWebView()
+        self.add(webview)
 
         # Window Listeners
+        self.connect("draw", self.draw_bg)
         self.connect("destroy", lambda g: Gtk.main_quit())
 
+        # Show
         self.show_all()
 
-    def area_draw(self, widget, cr):
-        cr.set_source_rgba(.2, .2, .2, 0.0)
+    def draw_bg(self, widget, cr):
+        """
+        Draw the transparent backround
+        """
+        cr.set_source_rgba(.0, .0, .0, 0.0)
         cr.set_operator(cairo.OPERATOR_SOURCE)
         cr.paint()
         cr.set_operator(cairo.OPERATOR_OVER)
