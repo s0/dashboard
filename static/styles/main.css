@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../fonts/glyphicons-halflings-regular.eot');
+  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
 body {
   margin: 0;
   padding: 0;
@@ -35,17 +40,37 @@ body .cards .overflow-indicator {
   right: 10px;
   height: 20px;
   background-color: #d25252;
-  z-index: 100;
+  text-align: center;
 }
 body .cards .overflow-indicator.top {
   top: -3px;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
+  border-bottom: 2px solid #333;
+}
+body .cards .overflow-indicator.top .arrow:before {
+  content: "\e113 \e113 \e113 \e113 \e113";
 }
 body .cards .overflow-indicator.bottom {
   bottom: -3px;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+  border-top: 2px solid #333;
+}
+body .cards .overflow-indicator.bottom .arrow:before {
+  content: "\e114 \e114 \e114 \e114 \e114";
+}
+body .cards .overflow-indicator .arrow {
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  color: #fff;
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-size: 12px;
 }
 body .cards .contents {
   overflow-y: auto;
@@ -61,4 +86,37 @@ body .cards .contents .card .inner {
   min-height: 60px;
   background-color: #eee;
   border-radius: 3px;
+}
+body .cards .contents .card.media .top {
+  padding: 5px 5px 0;
+  overflow: auto;
+}
+body .cards .contents .card.media .top .art {
+  float: left;
+  width: 50px;
+  height: 50px;
+  background-color: #333;
+}
+body .cards .contents .card.media .top .info {
+  margin-left: 55px;
+}
+body .cards .contents .card.media .top .info .title {
+  font-weight: 700;
+}
+body .cards .contents .card.media .top .info .artist {
+  color: #666;
+  font-size: 13px;
+}
+body .cards .contents .card.media .top .info .album {
+  color: #666;
+  font-size: 11px;
+}
+body .cards .contents .card.media .bottom {
+  margin: 5px;
+  border-top: 1px solid #ccc;
+}
+body .cards .contents .card.media .bottom .device {
+  font-size: 10px;
+  color: #666;
+  line-height: 20px;
 }

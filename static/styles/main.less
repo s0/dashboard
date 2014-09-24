@@ -1,3 +1,18 @@
+@font-face {
+  font-family: 'Glyphicons Halflings';
+
+  src: url('../fonts/glyphicons-halflings-regular.eot');
+  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+.glyphicon() {
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -44,18 +59,38 @@ body {
             right: 10px;
             height: 20px;
             background-color: #d25252;
-            z-index: 100;
+            text-align: center;
 
             &.top {
                 top: -3px;
                 border-top-left-radius: 3px;
                 border-top-right-radius: 3px;
+                border-bottom: 2px solid #333;
+
+                .arrow:before {
+                    content: "\e113 \e113 \e113 \e113 \e113";
+                }
             }
 
             &.bottom {
                 bottom: -3px;
                 border-bottom-left-radius: 3px;
                 border-bottom-right-radius: 3px;
+                border-top: 2px solid #333;
+
+                .arrow:before {
+                    content: "\e114 \e114 \e114 \e114 \e114";
+                }
+            }
+
+            .arrow {
+                .glyphicon;
+
+                color: #fff;
+                position: relative;
+                top: 1px;
+                display: inline-block;
+                font-size:12px;
             }
         }
 
@@ -78,7 +113,48 @@ body {
 
                 // Media Cards
                 &.media {
-                    
+
+                    .top {
+                        padding: 5px 5px 0;
+                        overflow: auto;
+
+                        .art {
+                            float: left;
+                            width: 50px;
+                            height: 50px;
+                            background-color: #333;
+                        }
+
+                        .info {
+                            margin-left: 55px;
+
+                            .title {
+                                font-weight: 700;
+                            }
+
+                            .artist {
+                                color: #666;
+                                font-size: 13px;
+                            }
+
+                            .album {
+                                color: #666;
+                                font-size: 11px;
+                            }
+                        }
+
+                    }
+
+                    .bottom {
+                        margin: 5px;
+                        border-top: 1px solid #ccc;
+
+                        .device {
+                            font-size: 10px;
+                            color: #666;
+                            line-height: 20px;
+                        }
+                    }
                 }
 
             }
