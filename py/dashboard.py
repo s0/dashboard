@@ -2,11 +2,13 @@
 
 #!/usr/bin/env python
 
-import cairo
 import os
 import signal
+import threading
 
-from gi.repository import Gtk, Gdk, WebKit
+from gi.repository import Gtk, Gdk, WebKit, GObject
+
+import plugin_manager
 
 class SidebarWindow (Gtk.Window):
     def __init__(self):
@@ -29,6 +31,9 @@ class SidebarWindow (Gtk.Window):
         # Window Listeners
         self.connect("destroy", lambda g: Gtk.main_quit())
 
+        # Setup PluginManager
+        plugin_manager.PluginManager(webview)
+
         # Show
         self.show_all()
 
@@ -50,4 +55,7 @@ if __name__ == "__main__":
     SidebarWindow()
     # Make close on Ctrl + C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
+    #Gtk.main()
+    print "Starting Gtk in thread: " + str(threading.current_thread())
     Gtk.main()
+    print "Closing Gtk"

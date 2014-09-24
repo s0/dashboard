@@ -9,6 +9,13 @@
             $cards_bottom = $('.cards.bottom:first'),
             $cards_bottom_contents = $cards_bottom.children('.contents:first')
 
+        // Setup global function
+
+        window.send_to_plugin = function(plugin, obj){
+            i = msg_id++;
+            document.title = i + ":::" + plugin + ":::" + JSON.stringify(obj)
+        }
+
         // Cards Overflow / Scroll
 
         function update_top_cards_scroll_indicators(){
@@ -64,6 +71,7 @@
             $card.animate({height: $inner.outerHeight(true)},
                           {step: resize_top_cards,
                            complete: function(){
+                               send_to_plugin("media", {a: 123, b: [2,3,4]})
                                $card.css("height", "auto")
                                $card.animate({opacity: 1})
                            }})
