@@ -21,6 +21,25 @@ class MPDThread(threading.Thread):
         self._manager = manager
 
     def run(self):
-        time.sleep(2)
-        print "RUN"
-        self._manager.create_card("media")
+        time.sleep(1)
+        while(True):
+            card = self._manager.create_card('media', 'bottom_first')
+            T(card).start()
+            time.sleep(2)
+
+class T(threading.Thread):
+
+    def __init__(self, card):
+        super(T, self).__init__()
+        self.card = card
+
+    def run(self):
+        time.sleep(3)
+        self.card.send({
+            'fn': 'set_info',
+            'data': {
+                'title': 'foo',
+                'artist': 'bar',
+                'album': 'baz'
+            }
+        })

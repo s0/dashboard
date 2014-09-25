@@ -1,3 +1,7 @@
+// Setup global properties
+window.card_init_fn = {};
+window.card_send_fn = {};
+
 (function($){
 
     $(document).ready(function(){
@@ -7,13 +11,59 @@
             $cards_top = $('.cards.top:first'),
             $cards_top_contents = $cards_top.children('.contents:first'),
             $cards_bottom = $('.cards.bottom:first'),
-            $cards_bottom_contents = $cards_bottom.children('.contents:first')
+            $cards_bottom_contents = $cards_bottom.children('.contents:first'),
+            templates = [],
+            card_handlers = {};
 
-        // Setup global function
+        // Setup global functions
 
+        // JS --> Python
         window.send_to_plugin = function(plugin, obj){
             i = msg_id++;
             document.title = i + ":::" + plugin + ":::" + JSON.stringify(obj)
+        }
+
+        // Python --> JS
+        window.new_card = function(card_id, card_type, position){
+            $card = templates[card_type].clone().attr('card_id', card_id);
+            hide_card($card)
+
+            // Place in position
+            if(position == 'default')
+                position = 'top_first';
+
+            switch(position){
+            case 'top_first':
+                $cards_top_contents.prepend($card);
+                break;
+            case 'top_last':
+                $cards_top_contents.append($card);
+                break;
+            case 'bottom_first':
+                $cards_bottom_contents.prepend($card);
+                break;
+            case 'bottom_last':
+            default:
+                $cards_bottom_contents.append($card);
+                break;
+            }
+
+            // Setup
+            var hide = false;
+            if(card_type in window.card_init_fn)
+                hide = window.card_init_fn[card_type](card_id, $card) === true;
+
+            // Show
+            if(!hide)
+                open_card($card);
+
+            card_handlers[card_id] = function(object){
+                window.card_send_fn[card_type](card_id, $card, object)
+            }
+        }
+
+        window.send_to_card = function(card_id, object){
+            card_handlers[card_id](object)
         }
 
         // Cards Overflow / Scroll
@@ -58,7 +108,7 @@
             resize_top_cards()
         })
 
-         $window.trigger('resize')
+        $window.trigger('resize')
 
 
         // Card Manipulation
@@ -71,7 +121,6 @@
             $card.animate({height: $inner.outerHeight(true)},
                           {step: resize_top_cards,
                            complete: function(){
-                               send_to_plugin("media", {a: 123, b: [2,3,4]})
                                $card.css("height", "auto")
                                $card.animate({opacity: 1})
                            }})
@@ -84,23 +133,11 @@
             })
         }
 
-
-
-        $(".card.closed").each(function(){
-            hide_card($(this))
-            open_card($(this))
+        // Setup Card Templates
+        $('.card-templates:first').children().each(function(){
+            var $template = $(this);
+            templates[$template.attr('card_type')] = $template;
         })
-
-        setTimeout(function(){
-            $(".card.closer").each(function(){
-                close_card($(this))
-            })
-                }, 1000)
-
-
-
-
-        console.debug($(document).width())
     })
 
 })(jQuery);

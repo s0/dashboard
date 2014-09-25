@@ -36,6 +36,10 @@ body {
     }
 
     // Localised Styles
+    .card-templates {
+        display: none;
+    }
+
     .cards {
 
         &.top {
@@ -75,6 +79,7 @@ body {
             height: 20px;
             background-color: #d25252;
             text-align: center;
+            z-index: 100;
 
             &.top {
                 top: -3px;
@@ -127,7 +132,7 @@ body {
                 }
 
                 // Media Cards
-                &.media {
+                &[card_type=media] {
 
                     .top {
                         padding: 5px 5px 0;

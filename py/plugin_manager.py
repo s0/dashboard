@@ -11,13 +11,15 @@ class PluginManager(object):
     def __init__(self, web_view):
 
         self.web_view = web_view
-        self.plugins = {
-            'media': plugins.media.MediaPlugin(self)
-        }
         self._next_card_id = 0;
         self._mutex = threading.BoundedSemaphore();
 
         web_view.connect("notify::title", self.receive_title_change)
+
+        # Load Plugins
+        self.plugins = {
+            'media': plugins.media.MediaPlugin(self)
+        }
 
     def receive_title_change(self, *args):
         title = self.web_view.get_title()
@@ -26,14 +28,12 @@ class PluginManager(object):
             return
 
         split = title.split(':::', 2)
-        print split
 
         if len(split) == 3:
             plugin = split[1]
             obj = json.loads(split[2])
 
             if plugin in self.plugins:
-                print "handling message in thread: " + str(threading.current_thread())
                 self.plugins[plugin].handle_message(obj)
 
     def send_to_card(self, card_id, obj):

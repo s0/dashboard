@@ -55,7 +55,4 @@ if __name__ == "__main__":
     SidebarWindow()
     # Make close on Ctrl + C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    #Gtk.main()
-    print "Starting Gtk in thread: " + str(threading.current_thread())
     Gtk.main()
-    print "Closing Gtk"
