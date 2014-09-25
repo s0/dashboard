@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "Beacon Chrome Extension",
+    "description": "Chrome Extension to make your browser more connected to your devices",
+    "version": "1.0",
+
+    "permissions": [
+    ],
+
+    "content_scripts": [
+        {
+            "matches": ["https://play.google.com/music/listen*"],
+            "js": ["jquery-2.0.3.min.js", "contentscript.js"]
+        }
+    ],
+
+    "background": {
+        "scripts": ["background.js"]
+    },
+
+    "web_accessible_resources": ["jquery-2.0.3.min.map"]
+}
