@@ -1,5 +1,7 @@
 (function($){
 
+    console.log("Inserted contentscript");
+
     var update_timeout = 0,
         $player = $('#player'),
         $player_song_info = $('#playerSongInfo'),
@@ -11,6 +13,16 @@
             album: null
         };
 
+    // Connect to background script
+    var port = chrome.runtime.connect();
+
+    port.onMessage.addListener(function(msg){
+        console.log(msg)
+    })
+
+    port.postMessage({action: "Knock knock"});
+
+    // Listen for changes in DOM
     $player.bind('DOMSubtreeModified', function(){
         clearTimeout(update_timeout)
         update_timeout = setTimeout(update_info, 50)
