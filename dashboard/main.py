@@ -8,11 +8,12 @@ import threading
 
 from gi.repository import Gtk, Gdk, WebKit, GObject
 
-import plugin_manager
+import dashboard.plugin_manager
 
 class SidebarWindow (Gtk.Window):
     def __init__(self):
         super(SidebarWindow, self).__init__()
+        self.set_title("dashboard")
 
         # Start Compositing
         screen = self.get_screen()
@@ -32,7 +33,7 @@ class SidebarWindow (Gtk.Window):
         self.connect("destroy", lambda g: Gtk.main_quit())
 
         # Setup PluginManager
-        plugin_manager.PluginManager(webview)
+        dashboard.plugin_manager.PluginManager(webview)
 
         # Show
         self.show_all()

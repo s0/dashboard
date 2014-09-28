@@ -2,7 +2,7 @@ import json
 import gobject
 import threading
 
-import plugins.media
+import dashboard.plugins.media
 
 gobject.threads_init()
 
@@ -18,7 +18,7 @@ class PluginManager(object):
 
         # Load Plugins
         self.plugins = {
-            'media': plugins.media.MediaPlugin(self)
+            'media': dashboard.plugins.media.Plugin(self)
         }
 
     def receive_title_change(self, *args):
@@ -52,6 +52,10 @@ class PluginManager(object):
 
         return Card(self, card_id)
 
+    def del_card(self, card_id):
+        js = "window.del_card(%s)" % (card_id)
+        self.send_js(js)
+
     def send_js(self, js):
         gobject.idle_add(self.__send_js, js)
 
@@ -67,3 +71,6 @@ class Card(object):
 
     def send(self, obj):
         self._manager.send_to_card(self._card_id, obj)
+
+    def delete(self):
+        self._manager.del_card(self._card_id)

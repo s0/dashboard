@@ -20,6 +20,9 @@
                     $elems.info_title.text(data.title);
                     $elems.info_artist.text(data.artist);
                     $elems.info_album.text(data.album);
+                },
+                set_type: function(type){
+                    $elems.device.text(type)
                 }
             };
         cards[card_id] = card_fn;

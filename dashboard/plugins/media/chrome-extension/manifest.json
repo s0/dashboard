@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
-    "name": "Beacon Chrome Extension",
-    "description": "Chrome Extension to make your browser more connected to your devices",
+    "name": "Dashboard Media Companion for Goole Chrome",
+    "description": "Chrome extension to interact with media functionality of the dashboard",
     "version": "1.0",
 
     "permissions": [

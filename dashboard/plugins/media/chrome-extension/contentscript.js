@@ -1,5 +1,7 @@
 (function($){
 
+    MEDIA_TYPE = 'google_play';
+
     console.log("Inserted contentscript");
 
     var update_timeout = 0,
@@ -20,7 +22,17 @@
         console.log(msg)
     })
 
-    port.postMessage({action: "Knock knock"});
+    port.postMessage({action: "new_tab", media_type: MEDIA_TYPE});
+
+    setTimeout(function(){
+        port.postMessage({fn: "set_info",
+                          data: {
+                              title: "foo",
+                              album: "bar",
+                              artist: "bazzzzz!"
+                          }
+                         });
+        }, 1000)
 
     // Listen for changes in DOM
     $player.bind('DOMSubtreeModified', function(){
