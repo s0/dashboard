@@ -6,8 +6,9 @@ import tornado.web
 import tornado.websocket
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
-    def initialize(self, manager):
+    def initialize(self, manager, plugin):
         self._manager = manager
+        self._plugin = plugin
         self.cards = {}
 
     def open(self, *args):
@@ -15,9 +16,6 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         obj = json.loads(message)
-        print self.cards
-
-        print obj
 
         tab_id = obj['tab_id']
         if 'action' in obj:
@@ -29,35 +27,37 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                     'data': obj['media_type']
                 })
 
-                # Sent test message
-                self.write_message(json.dumps({'tab_id': obj['tab_id'], 'test': 'message'}))
+                def card_handler(message):
+                    message['tab_id'] = tab_id
+                    self.write_message(message)
 
-            elif obj['action'] == 'del_tab':
+                self._plugin.register_card_handler(card.card_id, card_handler)
+
+            elif obj['action'] == 'del_tab' and tab_id in self.cards:
                 self.cards[tab_id].delete()
                 del self.cards[tab_id]
         else:
-            self.cards[tab_id].send(obj)
-
-        print self.cards
+            if tab_id in self.cards:
+                self.cards[tab_id].send(obj)
 
     def on_close(self):
         for card in self.cards.values():
             card.delete()
 
     def check_origin(self, origin):
-        print "origin: " + str(origin)
         return True
 
 class Thread(threading.Thread):
 
-    def __init__(self, manager, port=8888):
+    def __init__(self, manager, plugin, port=8888):
         super(Thread, self).__init__()
         self._manager = manager
+        self._plugin = plugin
         self._port = port
 
     def run(self):
         app = tornado.web.Application([
-            (r'/', WebSocketHandler, {'manager': self._manager}),
+            (r'/', WebSocketHandler, {'manager': self._manager, 'plugin': self._plugin}),
         ])
         app.listen(self._port)
         tornado.ioloop.IOLoop.instance().start()

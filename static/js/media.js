@@ -11,9 +11,9 @@
                 info_artist:     $card.find('.info .artist:first'),
                 info_album:      $card.find('.info .album:first'),
                 device:          $card.find('.device:first'),
-                btn_next:        $card.find('.btn .next'),
-                btn_stop:        $card.find('.btn .stop'),
-                btn_prev:        $card.find('.btn .prev'),
+                btn_next:        $card.find('.btn.next'),
+                btn_stop:        $card.find('.btn.stop'),
+                btn_prev:        $card.find('.btn.prev'),
             },
             card_fn = {
                 set_info: function(data){
@@ -23,6 +23,34 @@
                 },
                 set_type: function(type){
                     $elems.device.text(type)
+                },
+                set_state: function(data){
+
+                    if(data.toggle_enabled)
+                        $elems.btn_toggle.removeClass('disabled')
+                    else
+                        $elems.btn_toggle.addClass('disabled')
+
+                    if(data.state == 'playing')
+                        $elems.btn_toggle_icon.removeClass('play').addClass('pause')
+                    else
+                        $elems.btn_toggle_icon.addClass('play').removeClass('pause')
+
+                    if(data.stop_enabled)
+                        $elems.btn_stop.removeClass('disabled')
+                    else
+                        $elems.btn_stop.addClass('disabled')
+
+                    if(data.next_enabled)
+                        $elems.btn_next.removeClass('disabled')
+                    else
+                        $elems.btn_next.addClass('disabled')
+
+                    if(data.prev_enabled)
+                        $elems.btn_prev.removeClass('disabled')
+                    else
+                        $elems.btn_prev.addClass('disabled')
+
                 }
             };
         cards[card_id] = card_fn;
@@ -33,6 +61,30 @@
                            {
                                card_id: card_id,
                                action: 'toggle'
+                           })
+        });
+
+        $elems.btn_next.click(function(){
+            send_to_plugin('media',
+                           {
+                               card_id: card_id,
+                               action: 'next'
+                           })
+        });
+
+        $elems.btn_stop.click(function(){
+            send_to_plugin('media',
+                           {
+                               card_id: card_id,
+                               action: 'stop'
+                           })
+        });
+
+        $elems.btn_prev.click(function(){
+            send_to_plugin('media',
+                           {
+                               card_id: card_id,
+                               action: 'prev'
                            })
         });
     }

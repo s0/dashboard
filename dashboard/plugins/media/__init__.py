@@ -12,8 +12,17 @@ class Plugin(dashboard.plugins.abc.PluginABC):
 
     def __init__(self, manager):
         self._manager = manager
+        self._handlers = {}
 
-        media_chrome.Thread(manager).start()
+        media_chrome.Thread(manager, self).start()
         #media_mpd.MPDThread(manager).start()
+
+    def handle_message(self, message):
+        if message['card_id'] in self._handlers:
+            self._handlers[message['card_id']](message)
+
+
+    def register_card_handler(self, card_id, handler):
+        self._handlers[card_id] = handler
 
 

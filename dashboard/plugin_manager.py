@@ -60,6 +60,7 @@ class PluginManager(object):
         gobject.idle_add(self.__send_js, js)
 
     def __send_js(self, js):
+        print js
         self.web_view.execute_script(js)
 
 
@@ -67,10 +68,10 @@ class Card(object):
 
     def __init__(self, manager, card_id):
         self._manager = manager
-        self._card_id = card_id
+        self.card_id = card_id
 
     def send(self, obj):
-        self._manager.send_to_card(self._card_id, obj)
+        self._manager.send_to_card(self.card_id, obj)
 
     def delete(self):
-        self._manager.del_card(self._card_id)
+        self._manager.del_card(self.card_id)
