@@ -6,7 +6,6 @@
 
     var update_timeout = 0,
         $player = $('#player'),
-        $player_song_info = $('#playerSongInfo'),
         $buttons = $('.player-middle:first'),
         $button_repeat = $buttons.children("[data-id=repeat]:first"),
         now_playing = {
@@ -25,14 +24,8 @@
     port.postMessage({action: "new_tab", media_type: MEDIA_TYPE});
 
     setTimeout(function(){
-        port.postMessage({fn: "set_info",
-                          data: {
-                              title: "foo",
-                              album: "bar",
-                              artist: "bazzzzz!"
-                          }
-                         });
-        }, 1000)
+       
+        }, 4000)
 
     // Listen for changes in DOM
     $player.bind('DOMSubtreeModified', function(){
@@ -42,7 +35,10 @@
 
     function update_info(){
 
-        var title = null,
+        console.log("update_info")
+
+        var $player_song_info = $('#playerSongInfo'),
+            title = null,
             artist = null,
             album = null,
             changed = false;
@@ -90,7 +86,7 @@
 
     function info_changed(){
         console.debug("changed")
-        console.debug(now_playing)
+        port.postMessage({fn: "set_info", data: now_playing});
     }
 
 })(jQuery)

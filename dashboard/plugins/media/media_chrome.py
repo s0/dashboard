@@ -15,6 +15,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         obj = json.loads(message)
+        print self.cards
 
         print obj
 
@@ -29,15 +30,19 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 })
 
                 # Sent test message
-                self.write_message(json.dumps({'tab_id': obj['tab_id']}))
+                self.write_message(json.dumps({'tab_id': obj['tab_id'], 'test': 'message'}))
 
             elif obj['action'] == 'del_tab':
                 self.cards[tab_id].delete()
+                del self.cards[tab_id]
         else:
             self.cards[tab_id].send(obj)
 
+        print self.cards
+
     def on_close(self):
-       pass
+        for card in self.cards.values():
+            card.delete()
 
     def check_origin(self, origin):
         print "origin: " + str(origin)

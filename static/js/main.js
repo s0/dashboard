@@ -12,8 +12,7 @@ window.card_send_fn = {};
             $cards_top_contents = $cards_top.children('.contents:first'),
             $cards_bottom = $('.cards.bottom:first'),
             $cards_bottom_contents = $cards_bottom.children('.contents:first'),
-            templates = [],
-            card_handlers = {};
+            templates = [];
 
         // Setup global functions
 
@@ -56,23 +55,16 @@ window.card_send_fn = {};
             // Show
             if(!hide)
                 open_card($card);
-
-            card_handlers[card_id] = {
-                send: function(object){
-                    window.card_send_fn[card_type](card_id, $card, object)
-                },
-                del: function(){
-                    del_card($card)
-                }
-            }
         }
 
         window.send_to_card = function(card_id, object){
-            card_handlers[card_id].send(object)
+            var $card = get_card(card_id);
+            card_send_fn[$card.attr('card_type')](card_id, $card, object)
         }
 
         window.del_card = function(card_id){
-            card_handlers[card_id].del()
+            var $card = get_card(card_id);
+            close_card($card, function(){$card.remove()})
         }
 
         // Cards Overflow / Scroll
@@ -121,6 +113,10 @@ window.card_send_fn = {};
 
 
         // Card Manipulation
+        function get_card(card_id){
+            return $('.card[card_id="' + card_id + '"]:first')
+        }
+
         function hide_card($card){
             $card.css({height: 0, opacity: 0})
         }
@@ -140,10 +136,6 @@ window.card_send_fn = {};
                 $card.animate({height: 0},
                               {step: resize_top_cards, complete: complete})
             })
-        }
-
-        function del_card($card){
-            close_card($card, function(){$card.remove()})
         }
 
         // Setup Card Templates
