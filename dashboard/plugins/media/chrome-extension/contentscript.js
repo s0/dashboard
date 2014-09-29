@@ -17,7 +17,8 @@
             stop_enabled: false,
             next_enabled: false,
             prev_enabled: false
-        };
+        },
+        album_art_url = null;
 
     // Connect to background script
     var port = chrome.runtime.connect();
@@ -86,9 +87,18 @@
             changed = true
         }
 
-
         if(changed)
             port.postMessage({fn: "set_info", data: now_playing});
+
+        // Album Art
+        var new_album_art_url = $('#playingAlbumArt').attr('src');
+
+        if(album_art_url != new_album_art_url)
+            convertImgToBase64(new_album_art_url, function(base64){
+                port.postMessage({fn: "set_album_art", data: base64})
+            }, "image/png")
+
+        album_art_url = new_album_art_url
     }
 
     function control(){
@@ -145,5 +155,22 @@
         console.debug("send_state")
         port.postMessage({fn: "set_state", data: state});
     }
+
+    function convertImgToBase64(url, callback, outputFormat){
+        var canvas = document.createElement('canvas'),
+        ctx = canvas.getContext('2d'),
+        img = new Image;
+        img.crossOrigin = 'Anonymous';
+        img.onload = function(){
+            var dataURL;
+            canvas.height = Math.min(img.height, 62);
+            canvas.width = Math.min(img.width, 62);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            dataURL = canvas.toDataURL(outputFormat);
+            callback.call(this, dataURL);
+            canvas = null;
+        };
+        img.src = url;
+}
 
 })(jQuery)

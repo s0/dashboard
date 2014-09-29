@@ -51,6 +51,9 @@
                     else
                         $elems.btn_prev.addClass('disabled')
 
+                },
+                set_album_art: function(url){
+                    $elems.art.children('img').attr('src', url)
                 }
             };
         cards[card_id] = card_fn;
