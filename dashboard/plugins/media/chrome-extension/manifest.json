@@ -10,7 +10,11 @@
     "content_scripts": [
         {
             "matches": ["https://play.google.com/music/listen*"],
-            "js": ["jquery-2.0.3.min.js", "contentscript.js"]
+            "js": ["jquery-2.0.3.min.js", "contentscript-googleplay.js"]
+        },
+        {
+            "matches": ["http://grooveshark.com/*"],
+            "js": ["jquery-2.0.3.min.js", "contentscript-grooveshark.js"]
         }
     ],
 
