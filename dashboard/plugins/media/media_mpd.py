@@ -1,23 +1,124 @@
+"""
+Media control for MPD via MPC
+
+"""
+
+import re
+import subprocess
 import threading
 import time
 
+import mpd
+
+import media_art
+
 class Thread(threading.Thread):
 
-    def __init__(self, manager):
+    def __init__(self, manager, plugin, host='localhost', port=6600, local_path=None):
         super(Thread, self).__init__()
         self._manager = manager
+        self._plugin = plugin
+        self._host = host
+        self._port = port
+        self._local_path = local_path
 
     def run(self):
-        time.sleep(1)
-        while(True):
-            card = self._manager.create_card('media', 'top_first')
 
-            card.send({
-                'fn': 'set_info',
-                'data': {
-                    'title': 'foo',
-                    'artist': 'bar',
-                    'album': 'baz'
-                }
-            })
-            time.sleep(2)
+        # Wait to initialise5
+        time.sleep(1)
+
+        self._client = mpd.MPDClient()
+        self._client.timeout = 10
+        self._client.idletimeout = None
+
+        self._state = 'stop'
+        self._card = None;
+        self._info = None
+        self._file = None
+
+        while(True):
+            try:
+                self._client.connect(self._host, self._port)
+
+                while(True):
+                    self.update()
+                    time.sleep(1)
+            except:
+                time.sleep(5)
+
+    def update(self):
+        state = self._client.status()['state']
+
+        if self._state != state:
+            self._state = state
+            if state == 'stop' and self._card:
+                self._card.delete()
+                self._card = None
+            elif state == 'pause' or state == 'play':
+                if not self._card:
+                    self._card = self._manager.create_card('media', 'top_first')
+                    self._plugin.register_card_handler(
+                        self._card.card_id, self.card_handler
+                    )
+                self._card.send({
+                    'fn': 'set_type',
+                    'data': 'mpd:' + self._host
+                })
+                self._card.send({
+                    'fn': 'set_state',
+                    'data': {
+                        'state': 'playing' if state == 'play' else 'paused',
+                        'toggle_enabled': True,
+                        'stop_enabled': True,
+                        'next_enabled': True,
+                        'prev_enabled': True
+                    }
+                })
+
+        if state == 'pause' or state == 'play':
+
+            current_song = self._client.currentsong()
+
+            info = {
+                'title': current_song['title'],
+                'artist': current_song['artist'],
+                'album': current_song['album']
+            }
+
+            if self._info != info:
+                self._info = info
+                if self._card:
+                    self._card.send({
+                        'fn': 'set_info',
+                        'data': info
+                    })
+
+            if self._file != current_song['file']:
+                self._file = current_song['file']
+                media_art.get_image(self._local_path, self._file)
+        else:
+            self._info = None
+            self._file = None
+
+    def card_handler(self, message):
+        action = message['action']
+        if action == 'stop':
+            self._client.stop()
+
+        elif action == 'prev':
+            status = self._client.status()
+            if float(status['elapsed']) < 4:
+                self._client.previous()
+            else:
+                self._client.seek(status['song'], 0)
+
+        elif action == 'next':
+            self._client.next()
+
+        elif action == 'toggle':
+            if self._client.status()['state'] == 'play':
+                self._client.pause()
+            else:
+                self._client.play()
+
+        self.update()
