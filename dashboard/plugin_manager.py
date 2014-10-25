@@ -1,10 +1,10 @@
 import json
-import gobject
+from gi.repository import GObject
 import threading
 
 import dashboard.plugins.media
 
-gobject.threads_init()
+GObject.threads_init()
 
 class PluginManager(object):
 
@@ -57,7 +57,7 @@ class PluginManager(object):
         self.send_js(js)
 
     def send_js(self, js):
-        gobject.idle_add(self.__send_js, js)
+        GObject.idle_add(self.__send_js, js)
 
     def __send_js(self, js):
         print js
