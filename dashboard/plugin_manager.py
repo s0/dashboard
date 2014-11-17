@@ -3,6 +3,7 @@ from gi.repository import GObject
 import threading
 
 import dashboard.plugins.media
+import dashboard.plugins.bluetooth
 
 GObject.threads_init()
 
@@ -18,7 +19,8 @@ class PluginManager(object):
 
         # Load Plugins
         self.plugins = {
-            'media': dashboard.plugins.media.Plugin(self)
+            'media': dashboard.plugins.media.Plugin(self),
+            'bluetooth': dashboard.plugins.bluetooth.Plugin(self),
         }
 
     def receive_title_change(self, *args):

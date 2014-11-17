@@ -3,6 +3,7 @@ Obtains the artwork for media files
 
 """
 
+import base64
 import os
 
 try:
@@ -37,6 +38,9 @@ def get_image(root_dir, path):
         pass
 
     if artwork:
+        print "===="
         print "ARTWORK!"
         print type(artwork)
-        print artwork
+        print base64.encode(artwork, "-_")
+        print type(base64.encode(artwork, "-_"))
+        print "===="

@@ -126,13 +126,16 @@ body {
                 margin: 0 10px;
 
                 .inner {
-                    min-height: 60px;
                     background-color: #eee;
                     border-radius: 3px;
                 }
 
                 // Media Cards
                 &[card_type=media] {
+
+                    .inner {
+                        min-height: 60px;
+                    }
 
                     .top {
                         padding: 5px 5px 0;
@@ -234,6 +237,65 @@ body {
                         .stop:before {
                             content: "\e074";
                         }
+                    }
+                }
+
+                // Bluetooth Cards
+                &[card_type=bluetooth_device] {
+
+                    .top {
+                        padding: 5px;
+                        overflow: hidden;
+
+                        .btn {
+                            position: absolute;
+                            width: 40px;
+                            right: 5px;
+                            top: 0;
+                            height: 100%;
+                            overflow: hidden;
+
+                            .control {
+                                position: absolute;
+                                width: 100%;
+                                top: 50%;
+                                height: 0;
+
+                                div {
+                                    .glyphicon;
+                                    position: absolute;
+                                    top: -10px;
+                                    font-size: 20px;
+                                    text-align: center;
+
+                                    &:before {
+                                        content: "\e018";
+                                    }
+
+                                    &.connected {
+                                        color: #50861E;
+                                    }
+                                }
+                            }
+                        }
+
+                        .info {
+                            margin: 0 55px 0 0;
+
+                            .name {
+                                font-weight: 700;
+                            }
+
+                            .status {
+                                color: #666;
+                                font-size: 13px;
+
+                                &.connected {
+                                    color: #50861E;
+                                }
+                            }
+                        }
+
                     }
                 }
 

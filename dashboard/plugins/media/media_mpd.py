@@ -24,7 +24,8 @@ class Thread(threading.Thread):
 
     def run(self):
 
-        # Wait to initialise5
+        # Wait for window to initialise
+        # Can be removed after refactoring
         time.sleep(1)
 
         self._client = mpd.MPDClient()
