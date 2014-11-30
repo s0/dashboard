@@ -131,7 +131,7 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     core = DashboardCore()
-    dashboard.view.gtk.spawn_sidebar_window(core)
+
     dashboard.view.gtk.spawn_sidebar_window(core)
 
     # Start GTK in main Thread
