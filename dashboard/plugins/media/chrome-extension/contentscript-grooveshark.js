@@ -82,14 +82,14 @@
         }
 
         if(changed)
-            port.postMessage({fn: "set_info", data: now_playing});
+            port.postMessage({key: "info", value: now_playing});
 
         // Album Art
         var new_album_art_url = $('#now-playing-image').attr('src');
 
         if(album_art_url != new_album_art_url)
             convertImgToBase64(new_album_art_url, function(base64){
-                port.postMessage({fn: "set_album_art", data: base64})
+                port.postMessage({key: "album_art", value: base64})
             }, "image/png")
 
         album_art_url = new_album_art_url
@@ -146,7 +146,7 @@
 
     function send_state(){
         console.debug("send_state")
-        port.postMessage({fn: "set_state", data: state});
+        port.postMessage({key: "play_state", value: state});
     }
 
     function convertImgToBase64(url, callback, outputFormat){

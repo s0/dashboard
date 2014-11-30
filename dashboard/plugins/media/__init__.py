@@ -10,19 +10,14 @@ import media_mpd
 
 class Plugin(dashboard.plugins.abc.PluginABC):
 
-    def __init__(self, manager):
-        self._manager = manager
+    def __init__(self, core):
+        self._core = core
         self._handlers = {}
 
-        media_chrome.Thread(manager, self).start()
-        media_mpd.Thread(manager, self, 'bumblebee.sparknet', local_path="/media/My_Book/Media/Music").start()
+        media_chrome.Thread(core, self).start()
+        media_mpd.Thread(core, self, 'bumblebee.sparknet', local_path="/media/My_Book/Media/Music").start()
 
     def handle_message(self, message):
-        if message['card_id'] in self._handlers:
-            self._handlers[message['card_id']](message)
-
-
-    def register_card_handler(self, card_id, handler):
-        self._handlers[card_id] = handler
+        print message
 
 

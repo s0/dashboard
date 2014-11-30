@@ -23,7 +23,7 @@ class DashboardCore(object):
         # Used for thread-safe generation of IDS
         self._mutex = threading.BoundedSemaphore();
 
-        #self.plugin_manager = dashboard.plugin_manager.PluginManager()
+        self.plugin_manager = dashboard.plugin_manager.PluginManager(self)
 
     def recv_message(self, plugin, obj):
         """
@@ -109,45 +109,30 @@ class Card(object):
         """
         Called by plugin managing the card to change a property of the card
         """
-        state[key] = value
+        self.state[key] = value
         self._core.update_card_state(self, key, value)
 
     def delete(self):
         """
         Called by plugin managing the card to delete the card
         """
-        self._core.delete_card(card)
+        self._core.delete_card(self)
 
     def send(self, obj):
         """
         Called by a DashboardCore to send an object to the handler of the card
         """
-        self._handler.recv_message(obj)
-
-
-class TestThread(threading.Thread):
-
-    def __init__(self, core):
-        super(TestThread, self).__init__()
-        self.core = core
-
-    def run(self):
-        time.sleep(0.5)
-        print "creating card"
-        core.create_card("media", "default", None)
-        print "created card"
+        self._handler(obj)
 
 
 if __name__ == "__main__":
-    core = DashboardCore()
-    dashboard.view.gtk.spawn_sidebar_window(core)
-    dashboard.view.gtk.spawn_sidebar_window(core)
-
-    # Test Thread
-    TestThread(core).start()
 
     # Make close on Ctrl + C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    core = DashboardCore()
+    dashboard.view.gtk.spawn_sidebar_window(core)
+    dashboard.view.gtk.spawn_sidebar_window(core)
 
     # Start GTK in main Thread
     # (GTK needs to be in this thread)

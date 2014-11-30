@@ -10,26 +10,21 @@ import dashboard.plugins.abc
 
 class Plugin(dashboard.plugins.abc.PluginABC):
 
-    def __init__(self, manager):
-        self._manager = manager
+    def __init__(self, core):
+        self._core = core
         self._handlers = {}
 
-        Thread(manager, self, "00:00:00:00:00:00", "Nexus 5").start()
+        Thread(core, self, "00:00:00:00:00:00", "Nexus 5").start()
 
     def handle_message(self, message):
-        if message['card_id'] in self._handlers:
-            self._handlers[message['card_id']](message)
-
-
-    def register_card_handler(self, card_id, handler):
-        self._handlers[card_id] = handler
+        print message
 
 
 class Thread(threading.Thread):
 
     def __init__(self, manager, plugin, mac, name=None):
         super(Thread, self).__init__()
-        self._manager = manager
+        self._core = manager
         self._plugin = plugin
         self._mac = mac
         self._name = name
@@ -65,24 +60,18 @@ class Thread(threading.Thread):
     def set_connected(self):
 
         self.create_card()
-        self._card.send({
-            'fn': 'set_info',
-            'data': {
-                'name': self._name,
-                'status': 'connected'
-            }
+        self._card.set_state('info', {
+            'name': self._name,
+            'status': 'connected'
         })
 
     def set_disconnected(self):
 
         if(self._card_when_disconnected):
             self.create_card()
-            self._card.send({
-                'fn': 'set_info',
-                'data': {
-                    'name': self._name,
-                    'status': 'disconnected'
-                }
+            self._card.set_state('info', {
+                'name': self._name,
+                'status': 'disconnected'
             })
         else:
             if self._card:
@@ -91,10 +80,7 @@ class Thread(threading.Thread):
 
     def create_card(self):
         if not self._card:
-            self._card = self._manager.create_card('bluetooth_device', 'bottom_first')
-            self._plugin.register_card_handler(
-                self._card.card_id, self.card_handler
-            )
+            self._card = self._core.create_card('bluetooth_device', 'bottom_first', self.card_handler)
 
     def card_handler(self, message):
         print message

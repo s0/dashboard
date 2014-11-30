@@ -1,9 +1,8 @@
+import json
 import threading
 import os
 
 from gi.repository import Gtk, Gdk, WebKit, GObject
-
-thread = None
 
 class SidebarWindow(Gtk.Window):
 
@@ -61,11 +60,12 @@ class SidebarWindow(Gtk.Window):
         self.send_js(js)
 
     def deleted_card(self, card):
-        js = "window.del_card(%s)" % (card.card_id)
+        js = 'window.del_card(%s)' % (card.card_id)
         self.send_js(js)
 
     def card_state_updated(self, card, key, value):
-        pass
+        js = 'window.set_card_state(%s, "%s", %s)' % (card.card_id, key, json.dumps(value))
+        self.send_js(js)
 
     def send_js(self, js):
         GObject.idle_add(self.__send_js, js)
@@ -88,19 +88,7 @@ class SidebarWebView(WebKit.WebView):
 
         self.load_string(file(html).read(), 'text/html', 'UTF-8', "file://" + html)
 
-class ViewThread(threading.Thread):
-
-    def run(self):
-        pass #Gtk.main()
-
-    def new_window(self, core):
-        SidebarWindow(core)
-
 def spawn_sidebar_window(core):
-    global thread
-    if thread is None:
-        thread = ViewThread()
-        thread.start()
 
     def new_window():
         SidebarWindow(core)

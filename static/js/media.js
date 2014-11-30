@@ -15,16 +15,16 @@
                 btn_stop:        $card.find('.btn.stop'),
                 btn_prev:        $card.find('.btn.prev'),
             },
-            card_fn = {
-                set_info: function(data){
+            state_fn = {
+                info: function(data){
                     $elems.info_title.text(data.title);
                     $elems.info_artist.text(data.artist);
                     $elems.info_album.text(data.album);
                 },
-                set_type: function(type){
+                type: function(type){
                     $elems.device.text(type)
                 },
-                set_state: function(data){
+                play_state: function(data){
 
                     if(data.toggle_enabled)
                         $elems.btn_toggle.removeClass('disabled')
@@ -52,48 +52,44 @@
                         $elems.btn_prev.addClass('disabled')
 
                 },
-                set_album_art: function(url){
+                album_art: function(url){
                     $elems.art.children('img').attr('src', url)
                 }
             };
-        cards[card_id] = card_fn;
+        cards[card_id] = state_fn;
 
         // Setup Listeners
         $elems.btn_toggle.click(function(){
-            send_to_plugin('media',
+            send_to_card_handler(card_id,
                            {
-                               card_id: card_id,
                                action: 'toggle'
                            })
         });
 
         $elems.btn_next.click(function(){
-            send_to_plugin('media',
+            send_to_card_handler(card_id,
                            {
-                               card_id: card_id,
                                action: 'next'
                            })
         });
 
         $elems.btn_stop.click(function(){
-            send_to_plugin('media',
+            send_to_card_handler(card_id,
                            {
-                               card_id: card_id,
                                action: 'stop'
                            })
         });
 
         $elems.btn_prev.click(function(){
-            send_to_plugin('media',
+            send_to_card_handler(card_id,
                            {
-                               card_id: card_id,
                                action: 'prev'
                            })
         });
     }
 
-    window.card_send_fn.media = function(card_id, $card, object){
-        cards[card_id][object.fn](object.data)
+    window.card_state_fn.media = function(card_id, $card, key, value){
+        cards[card_id][key](value)
     }
 
 })()

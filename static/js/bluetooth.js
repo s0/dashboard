@@ -8,8 +8,8 @@
                 info_name:   $card.find('.info .name:first'),
                 info_status: $card.find('.info .status:first'),
             },
-            card_fn = {
-                set_info: function(data){
+            state_fn = {
+                info: function(data){
                     $elems.info_name.text(data.name);
 
                     if(data.status == 'connected'){
@@ -22,11 +22,11 @@
                     $elems.info_status.text(data.status)
                 }
             };
-        cards[card_id] = card_fn;
+        cards[card_id] = state_fn;
     }
 
-    window.card_send_fn.bluetooth_device = function(card_id, $card, object){
-        cards[card_id][object.fn](object.data)
+    window.card_state_fn.bluetooth_device = function(card_id, $card, key, value){
+        cards[card_id][key](value)
     }
 
 })()

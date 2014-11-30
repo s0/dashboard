@@ -1,6 +1,6 @@
 // Setup global properties
 window.card_init_fn = {};
-window.card_send_fn = {};
+window.card_state_fn = {};
 
 (function($){
 
@@ -17,9 +17,9 @@ window.card_send_fn = {};
         // Setup global functions
 
         // JS --> Python
-        window.send_to_plugin = function(plugin, obj){
+        window.send_to_card_handler = function(card_id, obj){
             i = msg_id++;
-            document.title = i + ":::" + plugin + ":::" + JSON.stringify(obj)
+            document.title = i + ":::" + card_id + ":::" + JSON.stringify(obj)
         }
 
         // Python --> JS
@@ -57,9 +57,9 @@ window.card_send_fn = {};
                 open_card($card);
         }
 
-        window.send_to_card = function(card_id, object){
+        window.set_card_state = function(card_id, key, value){
             var $card = get_card(card_id);
-            card_send_fn[$card.attr('card_type')](card_id, $card, object)
+            card_state_fn[$card.attr('card_type')](card_id, $card, key, value)
         }
 
         window.del_card = function(card_id){
