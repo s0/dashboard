@@ -2,4 +2,4 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-PYTHONPATH=$DIR ${DIR}/dashboard/main.py
+PYTHONPATH=$DIR ${DIR}/dashboard/core.py
