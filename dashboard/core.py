@@ -6,6 +6,7 @@ import threading
 import time
 
 import dashboard.plugin_manager
+import dashboard.command_listener
 import dashboard.view.gtk
 
 from gi.repository import Gtk
@@ -83,7 +84,7 @@ class DashboardCore(object):
                     listener.new_card(card)
 
                     for key, value in card.state.items():
-                        listener.card_state_updated(card.card_id, key, value)
+                        listener.card_state_updated(card, key, value)
 
     def unregister_card_listener(self, listener):
         """
@@ -93,10 +94,10 @@ class DashboardCore(object):
             print "UREG"
             self.card_listeners.remove(listener)
 
+    def spawn_window(self):
+        dashboard.view.gtk.spawn_sidebar_window(self)
 
 class Card(object):
-
-    state = {}
 
     def __init__(self, core, card_id, card_type, position, handler):
         self._core = core
@@ -104,6 +105,7 @@ class Card(object):
         self.card_type = card_type
         self.position = position
         self._handler = handler
+        self.state = {}
 
     def set_state(self, key, value):
         """
@@ -132,7 +134,9 @@ if __name__ == "__main__":
 
     core = DashboardCore()
 
-    dashboard.view.gtk.spawn_sidebar_window(core)
+    core.spawn_window()
+
+    dashboard.command_listener.CommandListener(core).start()
 
     # Start GTK in main Thread
     # (GTK needs to be in this thread)

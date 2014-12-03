@@ -55,7 +55,6 @@ class SidebarWindow(Gtk.Window):
             self._core.recv_card_message(card_id, obj)
 
     def new_card(self, card):
-        print "CC"
         js = 'window.new_card(%s, "%s", "%s")' % (card.card_id, card.card_type, card.position)
         self.send_js(js)
 
@@ -71,7 +70,6 @@ class SidebarWindow(Gtk.Window):
         GObject.idle_add(self.__send_js, js)
 
     def __send_js(self, js):
-        print "SENDING JS: " + js
         self.webview.execute_script(js)
 
 class SidebarWebView(WebKit.WebView):
