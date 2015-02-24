@@ -15,6 +15,10 @@
         {
             "matches": ["http://grooveshark.com/*"],
             "js": ["jquery-2.0.3.min.js", "contentscript-grooveshark.js"]
+        },
+        {
+            "matches": ["https://www.youtube.com/*"],
+            "js": ["jquery-2.0.3.min.js", "contentscript-youtube.js"]
         }
     ],
 
