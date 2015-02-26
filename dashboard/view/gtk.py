@@ -1,6 +1,8 @@
 import json
 import threading
 import os
+import cairo
+
 
 from gi.repository import Gtk, Gdk, WebKit, GObject
 
@@ -21,7 +23,7 @@ class SidebarWindow(Gtk.Window):
             self.set_visual(rgba_visual)
 
         # Set Background Color
-        self.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(0, 0, 0, 0))
+        #self.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(0, 0, 0, 0))
 
         # Setup Webview
         self.webview = SidebarWebView()
@@ -34,8 +36,20 @@ class SidebarWindow(Gtk.Window):
         # Listen for card changes
         core.register_card_listener(self)
 
+        self.set_app_paintable(True)
+        self.connect("draw", self.area_draw)
+
         # Show
         self.show_all()
+
+    def area_draw(self, widget, cr):
+        # Clear Window
+        cr.set_source_rgba(0, 0, 0, 0)
+        cr.set_operator(0) # OPERATOR_CLEAR
+        cr.paint()
+        # Paint internal Elements
+        cr.set_operator(cairo.OPERATOR_SOURCE)
+        cr.paint()
 
     def close(self, *args):
         print "closed window"
