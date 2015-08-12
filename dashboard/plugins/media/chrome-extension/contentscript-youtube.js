@@ -97,17 +97,17 @@
         // (created on demand and disposed of as elems change over the lifetime
         // of page
         var changed = false,
-            $buttons = $('.html5-player-chrome:first'),
-            $play_pause = $buttons.children('.ytp-button-play,.ytp-button-pause'),
-            $next = $buttons.children('.ytp-button-next'),
-            $prev = $buttons.children('.ytp-button-prev');
+            $buttons = $('#player-api .ytp-chrome-controls:first'),
+            $play_pause = $buttons.children('.ytp-play-button'),
+            $next = $('.ytp-next-button'),
+            $prev = $('.ytp-prev-button');
 
-            console.debug($play_pause)
+            console.debug($play_pause, $next, $prev);
 
         return {
             update_state: function(){
                 var  new_state = {
-                    state: $play_pause.hasClass('ytp-button-play') ? 'paused' : 'playing',
+                    state: $play_pause.attr('aria-label') === 'Play' ? 'paused' : 'playing',
                     toggle_enabled:
                         $play_pause.length > 0 && $play_pause.attr('disabled') === undefined,
                     stop_enabled: false,

@@ -106,7 +106,7 @@
         // (created on demand and disposed of as elems change over the lifetime
         // of page
         var changed = false,
-            $buttons = $('.player-middle:first'),
+            $buttons = $('.material-player-middle:first'),
             $play_pause = $buttons.children('[data-id=play-pause]:first'),
             $next = $buttons.children('[data-id=forward]:first'),
             $prev = $buttons.children('[data-id=rewind]:first');
