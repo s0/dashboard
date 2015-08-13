@@ -58,7 +58,7 @@
              artist = '';
              album = '';
         } else {
-            var $title = $player_song_info.find('#playerSongTitle'),
+            var $title = $player_song_info.find('#player-song-title'),
                 $artist = $player_song_info.find('#player-artist'),
                 $album = $player_song_info.find('.player-album:first');
 
