@@ -2,11 +2,13 @@
 
 import os
 import signal
+import sys
 import threading
 import time
 
-import dashboard.plugin_manager
 import dashboard.command_listener
+import dashboard.config
+import dashboard.plugin_manager
 import dashboard.view.gtk
 
 from gi.repository import Gtk
@@ -19,12 +21,21 @@ class DashboardCore(object):
     # List of objects that listen for changes in card state / new cards
     card_listeners = set()
 
-    def __init__(self):
+    def __init__(self, config_file):
+
+        self.config = dashboard.config.Config(config_file)
 
         # Used for thread-safe generation of IDS
         self._mutex = threading.BoundedSemaphore();
 
         self.plugin_manager = dashboard.plugin_manager.PluginManager(self)
+        
+        if (self.config.get('core', 'spawn_window') is True):
+            self.spawn_window()
+            
+        commands_fifo = self.config.get('core', 'commands_fifo')
+        if commands_fifo is not None:
+            dashboard.command_listener.CommandListener(self, commands_fifo).start()
 
     def recv_message(self, plugin, obj):
         """
@@ -132,11 +143,12 @@ if __name__ == "__main__":
     # Make close on Ctrl + C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-    core = DashboardCore()
+    if len(sys.argv) < 2:
+        print "config file path not included in command"
+        sys.exit(1)
 
-    core.spawn_window()
-
-    dashboard.command_listener.CommandListener(core).start()
+    config_file = sys.argv[1]
+    core = DashboardCore(config_file)
 
     # Start GTK in main Thread
     # (GTK needs to be in this thread)

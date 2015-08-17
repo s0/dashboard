@@ -1,24 +1,23 @@
 import threading
 import os
 
-command_fifo = "/tmp/dashboard_commands"
-
 class CommandListener(threading.Thread):
 
-    def __init__(self, core):
+    def __init__(self, core, command_fifo):
         super(CommandListener, self).__init__()
         self.core = core
+        self.command_fifo = command_fifo
 
     def run(self):
         print "listening for commands..."
 
         try:
-            os.mkfifo(command_fifo)
+            os.mkfifo(self.command_fifo)
         except:
             pass
 
         while True:
-            with open(command_fifo) as fifo:
+            with open(self.command_fifo) as fifo:
                 self.handle_command(fifo.read())
 
     def handle_command(self, cmd):

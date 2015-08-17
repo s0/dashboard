@@ -1,0 +1,13 @@
+core:
+  spawn_window: true
+  commands_fifo: /tmp/dashboard_commands
+plugins:
+  media:
+    - type: chrome
+      port: 8888
+    - type: mpd
+      host: <hostname>
+      port: 6600
+      local_path: <local directory of music>
+  github:
+    
