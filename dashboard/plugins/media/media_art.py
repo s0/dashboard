@@ -16,31 +16,29 @@ def get_image(root_dir, path):
     print "get image"
 
     artwork = None
+    artwork_content_type = "image/jpeg"
 
     if root_dir:
         full_path = os.path.join(root_dir, path)
     else:
         full_path = path
 
-    print "### Path: " + full_path
-    print mutagen
-    print os.path.isfile(full_path)
-
     # Try ID3
     if mutagen and os.path.isfile(full_path):
-        f = mutagen.File(full_path)
-        for t in f.tags:
-            print t
-        artwork = f.tags['APIC:'].data
+       f = mutagen.File(full_path)
+       try:
+           picture = f.pictures[0]
+           artwork = picture.data
+           artwork_content_type = picture.mime
+       except Exception:
+           if 'APIC:' in f.tags:
+               artwork = f.tags['APIC:'].data
+           if 'covr' in f.tags:
+               artwork = f.tags['covr'].data
 
     # Try Looking for image files
     if not artwork:
-        pass
+        print "artwork not found"
 
     if artwork:
-        print "===="
-        print "ARTWORK!"
-        print type(artwork)
-        print base64.encode(artwork, "-_")
-        print type(base64.encode(artwork, "-_"))
-        print "===="
+        return 'data:' + artwork_content_type + ';base64,' + base64.b64encode(artwork)

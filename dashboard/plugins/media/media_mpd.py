@@ -89,7 +89,10 @@ class Thread(threading.Thread):
 
             if self._file != current_song['file']:
                 self._file = current_song['file']
-                media_art.get_image(self._local_path, self._file)
+                image = media_art.get_image(self._local_path, self._file)
+                if image is not None:
+                    self._card.set_state('album_art', image)
+
         else:
             self._info = None
             self._file = None
