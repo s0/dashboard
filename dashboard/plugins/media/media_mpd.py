@@ -21,12 +21,16 @@ class Thread(threading.Thread):
         self._host = host
         self._port = port
         self._local_path = local_path
+        print "STARTING MPD"
+        print host
+        print port
+        print local_path
 
     def run(self):
 
         # Wait for window to initialise
         # Can be removed after refactoring
-        time.sleep(1)
+        # time.sleep(1)
 
         self._client = mpd.MPDClient()
         self._client.timeout = 10
@@ -44,7 +48,8 @@ class Thread(threading.Thread):
                 while(True):
                     self.update()
                     time.sleep(1)
-            except:
+            except mpd.MPDError as e:
+                print e
                 time.sleep(5)
 
     def update(self):
@@ -57,24 +62,15 @@ class Thread(threading.Thread):
                 self._card = None
             elif state == 'pause' or state == 'play':
                 if not self._card:
-                    self._card = self._manager.create_card('media', 'top_first')
-                    self._plugin.register_card_handler(
-                        self._card.card_id, self.card_handler
-                    )
-                self._card.send({
-                    'fn': 'set_type',
-                    'data': 'mpd:' + self._host
-                })
-                self._card.send({
-                    'fn': 'set_state',
-                    'data': {
+                    self._card = self._manager.create_card('media', 'default', self.card_handler)
+                self._card.set_state('type', 'mpd:' + self._host)
+                self._card.set_state('play_state', {
                         'state': 'playing' if state == 'play' else 'paused',
                         'toggle_enabled': True,
                         'stop_enabled': True,
                         'next_enabled': True,
                         'prev_enabled': True
-                    }
-                })
+                    })
 
         if state == 'pause' or state == 'play':
 
@@ -89,10 +85,7 @@ class Thread(threading.Thread):
             if self._info != info:
                 self._info = info
                 if self._card:
-                    self._card.send({
-                        'fn': 'set_info',
-                        'data': info
-                    })
+                    self._card.set_state('info', info)
 
             if self._file != current_song['file']:
                 self._file = current_song['file']

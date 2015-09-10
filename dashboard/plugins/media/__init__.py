@@ -17,8 +17,23 @@ class Plugin(dashboard.plugins.abc.PluginABC):
         self._handlers = {}
         self._last_active_card = None
 
-        media_chrome.Thread(core, self).start()
-        media_mpd.Thread(core, self, 'bumblebee.sparknet', local_path="/media/My_Book/Media/Music").start()
+        print self._core.config.get('plugins', 'media')
+
+        media_config = self._core.config.get('plugins', 'media');
+
+        if media_config is not None:
+            for item in media_config:
+                if item['type'] == 'chrome':
+                    kwargs = {}
+                    self._core.config.transfer(item, kwargs, 'port')
+                    media_chrome.Thread(core, self, **kwargs).start()
+                elif item['type'] == 'mpd':
+                    kwargs = {}
+                    self._core.config.transfer(item, kwargs, 'host', 'port', 'local_path')
+                    media_mpd.Thread(core, self, **kwargs).start()
+                else:
+                    print "Unrecognized Media Type in config: " + item['type']
+                    exit(1)
 
     def handle_message(self, message):
         card = self.get_active_media_card()
@@ -36,7 +51,7 @@ class Plugin(dashboard.plugins.abc.PluginABC):
 
     def toggle(self):
         print "Toggling Music"
-        
+
         card = self.get_active_media_card()
         if card is not None:
             card.send({"action": "toggle"})

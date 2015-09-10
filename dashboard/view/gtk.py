@@ -1,8 +1,8 @@
 import json
 import threading
+import time
 import os
 import cairo
-
 
 from gi.repository import Gtk, Gdk, WebKit, GObject
 
@@ -12,6 +12,7 @@ class SidebarWindow(Gtk.Window):
         super(SidebarWindow, self).__init__()
 
         self._core = core
+        self._ready = False
 
         self.set_title("dashboard")
 
@@ -33,14 +34,21 @@ class SidebarWindow(Gtk.Window):
         self.connect("destroy", lambda *a: core.unregister_card_listener(self))
         self.webview.connect("notify::title", self.receive_title_change)
 
-        # Listen for card changes
-        core.register_card_listener(self)
-
         self.set_app_paintable(True)
         self.connect("draw", self.area_draw)
 
         # Show
         self.show_all()
+        self.__ready = True
+        self.__loaded_at = time.time()
+
+        class DelayedListen(threading.Thread):
+
+            def run(_):
+                time.sleep(0.5)
+                core.register_card_listener(self)
+
+        DelayedListen().start()
 
     def area_draw(self, widget, cr):
         # Clear Window
@@ -86,6 +94,14 @@ class SidebarWindow(Gtk.Window):
     def __send_js(self, js):
         self.webview.execute_script(js)
 
+    def __wait_until_ready(self):
+        if not self.__ready:
+            return
+        # Wait at least 1 second
+        if self.__loaded_at > time.time() - 2:
+            time.sleep(1)
+        self.__ready = True
+
 class SidebarWebView(WebKit.WebView):
 
     def __init__(self):
@@ -106,4 +122,3 @@ def spawn_sidebar_window(core):
         SidebarWindow(core)
 
     GObject.idle_add(new_window)
-
