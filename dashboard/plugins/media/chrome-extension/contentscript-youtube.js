@@ -97,8 +97,7 @@
         // (created on demand and disposed of as elems change over the lifetime
         // of page
         var changed = false,
-            $buttons = $('#player-api .ytp-chrome-controls:first'),
-            $play_pause = $buttons.children('.ytp-play-button'),
+            $play_pause = $('.ytp-play-button'),
             $next = $('.ytp-next-button'),
             $prev = $('.ytp-prev-button');
 
