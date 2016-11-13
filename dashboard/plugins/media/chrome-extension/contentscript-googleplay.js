@@ -58,7 +58,7 @@
              artist = '';
              album = '';
         } else {
-            var $title = $player_song_info.find('#player-song-title'),
+            var $title = $player_song_info.find('#currently-playing-title'),
                 $artist = $player_song_info.find('#player-artist'),
                 $album = $player_song_info.find('.player-album:first');
 
@@ -91,7 +91,7 @@
             port.postMessage({key: "info", value: now_playing});
 
         // Album Art
-        var new_album_art_url = $('#playingAlbumArt').attr('src');
+        var new_album_art_url = $('#playerBarArt').attr('src');
 
         if(album_art_url != new_album_art_url)
             convertImgToBase64(new_album_art_url, function(base64){
