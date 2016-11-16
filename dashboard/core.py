@@ -9,6 +9,7 @@ import time
 import dashboard.command_listener
 import dashboard.config
 import dashboard.plugin_manager
+import dashboard.title_output
 import dashboard.view.gtk
 
 from gi.repository import Gtk
@@ -29,13 +30,17 @@ class DashboardCore(object):
         self._mutex = threading.BoundedSemaphore();
 
         self.plugin_manager = dashboard.plugin_manager.PluginManager(self)
-        
+
         if (self.config.get('core', 'spawn_window') is True):
             self.spawn_window()
-            
+
         commands_fifo = self.config.get('core', 'commands_fifo')
         if commands_fifo is not None:
             dashboard.command_listener.CommandListener(self, commands_fifo).start()
+
+        title_command = self.config.get('core', 'title_command')
+        if title_command is not None:
+            dashboard.title_output.TitleOutput(self, title_command).start()
 
     def recv_message(self, plugin, obj):
         """

@@ -1,6 +1,7 @@
 core:
   spawn_window: true
   commands_fifo: /tmp/dashboard_commands
+  title_command: xsetroot -name %s
 plugins:
   media:
     - type: chrome
@@ -10,4 +11,3 @@ plugins:
       port: 6600
       local_path: <local directory of music>
   github:
-    
