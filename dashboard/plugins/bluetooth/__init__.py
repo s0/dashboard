@@ -14,7 +14,11 @@ class Plugin(dashboard.plugins.abc.PluginABC):
         self._core = core
         self._handlers = {}
 
-        Thread(core, self, "00:00:00:00:00:00", "Nexus 5").start()
+        bluetooth_config = self._core.config.get('plugins', 'bluetooth');
+
+        if bluetooth_config is not None:
+            for item in bluetooth_config:
+                Thread(core, self, item['mac'], item['name']).start()
 
     def handle_message(self, message):
         print message

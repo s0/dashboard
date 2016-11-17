@@ -11,4 +11,8 @@ plugins:
       port: 6600
       local_path: <local directory of music>
     - type: dummy
-  github:
+  bluetooth:
+    - mac: 00:00:00:00:00:0A
+      name: My Device
+    - mac: 00:00:00:00:00:0B
+      name: My Device 2
