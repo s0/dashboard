@@ -10,4 +10,5 @@ plugins:
       host: <hostname>
       port: 6600
       local_path: <local directory of music>
+    - type: dummy
   github:

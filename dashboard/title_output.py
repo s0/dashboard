@@ -57,6 +57,20 @@ class TitleOutput(threading.Thread):
             except Exception as e:
                 print "Error getting batt details: " + str(e)
 
+            # Get media info
+
+            media = self.core.get_plugin('media')
+            if media is not None:
+                media_info = media.get_active_media_info()
+                if media_info is not None:
+                    info_str = media_info['state'].upper()
+                    if 'title' in media_info['info']:
+                        info_str += ': ' + media_info['info']['title']
+                        if 'artist' in media_info['info']:
+                            info_str += ' - ' + media_info['info']['artist']
+
+                    title = info_str + ' | ' + title
+
             command = self.title_command.replace('%s', title)
 
             subprocess.Popen(['bash', '-c', command])

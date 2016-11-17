@@ -22,3 +22,7 @@ class PluginManager(object):
     def recv_message(self, plugin, obj):
         if plugin in self.plugins:
             self.plugins[plugin].handle_message(obj)
+
+    def get_plugin(self, plugin):
+        if plugin in self.plugins:
+            return self.plugins[plugin]

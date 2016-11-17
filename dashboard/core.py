@@ -55,6 +55,9 @@ class DashboardCore(object):
         if card_id in self.cards:
             self.cards[card_id].send(obj)
 
+    def get_plugin(self, plugin):
+        return self.plugin_manager.get_plugin(plugin)
+
     def create_card(self, card_type, position, handler):
         """
         Used by a plugin to create a card
