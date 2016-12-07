@@ -71,8 +71,8 @@ class TitleOutput(threading.Thread):
 
                     title = info_str + ' | ' + title
 
-            command = self.title_command.replace('%s', title)
+            command = [s.replace('%s', title) for s in self.title_command.split(' ')]
 
-            subprocess.Popen(['bash', '-c', command])
+            subprocess.Popen(command)
 
             time.sleep(1)
