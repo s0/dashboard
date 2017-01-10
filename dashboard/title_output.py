@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import subprocess
@@ -6,16 +7,18 @@ import time
 
 class TitleOutput(threading.Thread):
 
-    def __init__(self, core, title_command):
+    def __init__(self, core, title_fifo):
         super(TitleOutput, self).__init__()
         self.core = core
-        self.title_command = title_command
+        self.title_fifo = title_fifo
 
     def run(self):
-        print "updating title: " + self.title_command
+        print "updating title: " + self.title_fifo
 
         while True:
-            title = time.strftime('%A %d/%m/%Y %I:%M:%S %p')
+            elems = []
+
+            elems.insert(0, {'full_text': time.strftime('%A %d/%m/%Y %I:%M:%S %p')})
 
             # Try and get temperature
 
@@ -24,9 +27,9 @@ class TitleOutput(threading.Thread):
                 temp_status = str( acpi_2.communicate()[0][11:-1] )
                 temp_status_split = re.compile("(,?)\s").split( temp_status )
                 if temp_status_split[0] == 'ok':
-                    title = temp_status_split[2] + 'C' + ' | ' + title
+                    elems.insert(0, {'full_text': temp_status_split[2] + 'C', 'color': '#00ccff'})
                 else:
-                    title = 'TEMP ERROR | '
+                    elems.insert(0, {'full_text': 'TEMP ERROR', 'color': '#ff0000'})
             except Exception as e:
                 print "Error getting temp: " + str(e)
 
@@ -36,7 +39,7 @@ class TitleOutput(threading.Thread):
                 acpi_1 = subprocess.Popen('acpi', shell=False, stdout=subprocess.PIPE)
                 batt_status_all = acpi_1.communicate()
                 if batt_status_all[0] == '':
-                    title = '\033[01;31m' 'NO BATT' '\033[0m | ' + title
+                    elems.insert(0, {'full_text': 'NO BATT', 'color': '#ff0000'})
                 else:
                     batt_status = str( batt_status_all[0][11:-1] ) # Trim batt number and \n
                     batt_status_split = re.compile('(,?)\s').split( batt_status )
@@ -47,13 +50,14 @@ class TitleOutput(threading.Thread):
 
                     if batt_discharging:
                         if batt_low:
-                            title = '\033[01;31mLOW BATT: ' +  batt_status_split[2] +'\033[0m | ' + title
+                            elems.insert(0, {'full_text': 'LOW BATT: ' +  batt_status_split[2], 'color': '#ff0000'})
                         else:
+                            msg = ''
                             if len( batt_status_split ) >= 5:
-                                title = 'Remaining: ' + batt_status_split[4] + ' | ' + title
-                            title = batt_status_split[2] + ' | ' + title
+                                elems.insert(0, {'full_text': 'Remaining: ' + batt_status_split[4]})
+                            elems.insert(0, {'full_text': batt_status_split[2]})
                     else:
-                        title = '\033[01;32mCHARGING: ' + batt_status_split[2] + '\033[0m | ' + title
+                        elems.insert(0, {'full_text': 'CHARGING: ' +  batt_status_split[2], 'color': '#00ff00'})
             except Exception as e:
                 print "Error getting batt details: " + str(e)
 
@@ -69,10 +73,10 @@ class TitleOutput(threading.Thread):
                         if 'artist' in media_info['info']:
                             info_str += ' - ' + media_info['info']['artist']
 
-                    title = info_str + ' | ' + title
+                    elems.insert(0, {'full_text': info_str})
 
-            command = [s.replace('%s', title) for s in self.title_command.split(' ')]
-
-            subprocess.Popen(command)
+            with open(self.title_fifo, 'w') as fifo:
+                fifo.write(json.dumps(elems))
+                fifo.flush()
 
             time.sleep(1)

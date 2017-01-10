@@ -1,7 +1,8 @@
 core:
   spawn_window: true
   commands_fifo: /tmp/dashboard_commands
-  title_command: xsetroot -name %s
+  title:
+    fifo: /tmp/status_fifo
 plugins:
   media:
     - type: chrome

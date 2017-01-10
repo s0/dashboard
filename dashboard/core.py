@@ -38,9 +38,9 @@ class DashboardCore(object):
         if commands_fifo is not None:
             dashboard.command_listener.CommandListener(self, commands_fifo).start()
 
-        title_command = self.config.get('core', 'title_command')
-        if title_command is not None:
-            dashboard.title_output.TitleOutput(self, title_command).start()
+        title_fifo = self.config.get('core', 'title', 'fifo')
+        if title_fifo is not None:
+            dashboard.title_output.TitleOutput(self, title_fifo).start()
 
     def recv_message(self, plugin, obj):
         """
