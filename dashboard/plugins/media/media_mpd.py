@@ -48,7 +48,7 @@ class Thread(threading.Thread):
                 while(True):
                     self.update()
                     time.sleep(1)
-            except mpd.MPDError as e:
+            except Exception as e:
                 print e
                 time.sleep(5)
 
