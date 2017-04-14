@@ -122,6 +122,7 @@ class Plugin(dashboard.plugins.abc.PluginABC):
         if card is not None:
             state = None
             return {
+                'type': card.state['type'],
                 'state': card.state['play_state']['state'],
                 'info': card.state['info'] if 'info' in card.state else None
             }

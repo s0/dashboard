@@ -74,6 +74,8 @@ class TitleOutput(threading.Thread):
                             info_str += ' - ' + media_info['info']['artist']
 
                     elems.insert(0, {'full_text': info_str})
+                    if media_info['type']:
+                        elems.insert(1, {'full_text': media_info['type'], 'color': '#00ccff'})
 
             with open(self.title_fifo, 'w') as fifo:
                 fifo.write(json.dumps(elems))
