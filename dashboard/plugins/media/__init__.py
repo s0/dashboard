@@ -7,6 +7,7 @@ import dashboard.plugins.abc
 # Plugin Specific Imports
 import media_chrome
 import media_mpd
+import media_spotify
 
 class Plugin(dashboard.plugins.abc.PluginABC):
 
@@ -31,6 +32,10 @@ class Plugin(dashboard.plugins.abc.PluginABC):
                     kwargs = {}
                     self._core.config.transfer(item, kwargs, 'host', 'port', 'local_path')
                     media_mpd.Thread(core, self, **kwargs).start()
+                elif item['type'] == 'spotify':
+                    kwargs = {}
+                    self._core.config.transfer(item, kwargs, 'token')
+                    media_spotify.Thread(core, self, **kwargs).start()
                 elif item['type'] == 'dummy':
 
                     state = {

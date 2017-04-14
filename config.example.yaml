@@ -12,6 +12,8 @@ plugins:
       port: 6600
       local_path: <local directory of music>
     - type: dummy
+    - type: spotify
+      token: abcdef1234567890
   bluetooth:
     - mac: 00:00:00:00:00:0A
       name: My Device
