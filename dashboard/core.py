@@ -10,7 +10,7 @@ import dashboard.command_listener
 import dashboard.config
 import dashboard.plugin_manager
 import dashboard.title_output
-import dashboard.view.gtk
+# import dashboard.view.gtk
 
 from gi.repository import Gtk
 
@@ -114,7 +114,8 @@ class DashboardCore(object):
             self.card_listeners.remove(listener)
 
     def spawn_window(self):
-        dashboard.view.gtk.spawn_sidebar_window(self)
+        # dashboard.view.gtk.spawn_sidebar_window(self)
+        pass
 
 class Card(object):
 
